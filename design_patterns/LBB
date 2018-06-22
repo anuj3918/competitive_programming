@@ -1,0 +1,97 @@
+Requirements:
+
+1. After the order is placed, we have a rating system
+2. Rating system asks questions based on the rating you give.
+3. Above 3 diff questions, below 3 diff set of questions
+4. After recording the response, we want to monitor the responses
+5. Something critical, we ask for further enquiries like was the product damaged etc.
+6. Resolve the conflict by reaching out to the customer.
+
+
+Design schema and APIs
+order_responses
+{
+    orderId: order123,
+    userId: Praful123,
+    rating: 2,
+    statusX: ['reaching out to customer', 'in progress', 'in talks with customer', 'waiting for reply']
+    status: resolved,
+    responses: [
+        {   
+            questionId: obj123,
+            questionString: '"How was the delivery ?",
+            answer: "Good"
+        },
+        {   
+            questionId: obj123,
+            questionString: '"How was the delivery ?",
+            answer: "Good"
+        }
+    ]
+}
+
+User
+{
+    id: Praful123
+    name
+    email
+    phone
+}
+
+question document
+{
+    id:obj123
+    question: "How was the delivery ?",
+    options: [],
+    isStringAnswer: false
+    win: false (below 3 rating)
+
+}
+
+{
+    id: OBJjkfghdjkfbjkdf
+    question: "How was the delivery ?",
+    options: [dfhgdfjhvd],
+    isStringAnswer: false
+    win: true (above 3 rating)
+}
+
+
+Please rate us ?  X/5
+
+user gave rating 2
+we have an API call to the backend service saying  /fetchQuestions (send rating alongwith)
+This API will give the correct quetions to be asked to the user
+
+For internal customer support APIs:
+
+app.get((req, res)=>{
+    User_responses.find({}, )
+    .populate()
+})
+
+
+
+
+Lets say we ask user "How was the delivery ?"
+Options : Good, Bad, worse than ever. best
+
+
+List of APIs :
+
+For the customer:
+1. GET: Get all questions for the user based on rating (2)
+2. POST: Record the answers of questions and POST all the responses back to create a order_responses document
+
+
+For customer support:
+1. GET: Get the recent orders from order_responses collection
+2. PUT: - Once the customer has been emailed or called or reached out, update the status statusX
+        - Update the status of this order to "RESOLVED".
+
+Customer support actions:
+1. POST: 
+    {
+        action: email / sms,
+        body: 'dkjvbsjhdfbvj"
+    }
